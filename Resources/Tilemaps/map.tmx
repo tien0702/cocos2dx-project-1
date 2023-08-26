@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="base-map.tsx"/>
+ <tileset firstgid="177" source="meta.tsx"/>
+ <tileset firstgid="179" source="fence.tsx"/>
+ <layer id="1" name="Background" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz7ENACEMALGsB/RILyYA9u/JGJfXFR7ALSJ6cSN9aRa3fKD4YPHB4oPFB4sPFh8sPlh8sPhg8cHig8UHy58eO53ibno3PPpo
+  </data>
+ </layer>
+ <layer id="3" name="Fence" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt0DEOgCAQBdG9/3XEZm3gZlDSaGXMrJmX/IRyh4j/ONZa0Z1bR773JZ/Lm3c1drDYwWIHix0sdrDYwWIHix0sdrDYwWIHix0s++3XWi+68RRZ0ASWE2uF
+  </data>
+ </layer>
+ <layer id="2" name="Meta" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz0ENACAMwED8y0EhXyTcll5SAT1njzu8/2OqPix9WPqw9GHpw9KHpQ9LH5Y+LH1Y+rD0Ydn6MblNHhq5Zuk=
+  </data>
+ </layer>
+</map>

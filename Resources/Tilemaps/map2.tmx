@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="3">
+ <tileset firstgid="1" source="interiors.tsx"/>
+ <tileset firstgid="1025" source="meta.tsx"/>
+ <tileset firstgid="1027" source="decorative_props.tsx"/>
+ <layer id="1" name="Ground" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwzEJAAAMA7DC/J/1WxF7E0gvqaqqqqqq+jpiLnrO
+  </data>
+ </layer>
+ <layer id="4" name="Road" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlcsNwkAMRFfa7lDqIIm2Dz5dzIlARDl82uFJ4RBxRBicxSON5Js962dtSqF/0Tqn1OIO9/nX07yvDbNv8Q7vF5zjwOwDPuLTgnMEV74UXPlScOVLwZUvfZMreol3Ewzo0/WK2cvTTbbtxXuJ3as1qMssR5l2Y9aLnQt+1RnUrzkse8GtuEH1BvU4y3CebsSsl/HtVfF/1JIj/kFfCq58KbjypeDKl2rh6sLsV3zDd+McDzJJFOQ=
+  </data>
+ </layer>
+ <layer id="2" name="Wall" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt0zdOA1EQxvF5C1R7C7fcgpZbUAEm2eQsUQEGjMkZiQpjcrQxQaLlFoSKS/hvcYVd7TxrPuknTTV6o6cvEJFOJ9KFbqTRg170oR8DyCCLQQxhGCMYxRjGMYFJTGEaM5h18e8PuSGFeeYFLCKHJSxjBXmsooA1rGMDm9jCNnawiz3s4wCHOMKxi39/Kze04ZS5iDOUcI4LXOIK17jBLe5wjwc84gllVPCMKl7wije8u/j3p7mhQ/xPO+aSfkQEqf/HSdKPiCA5fCT9iAhSkv+e+55PsZ5rivVcV6znumI91xXrua5Yz3XFeq4r1nNdsZ7rSiP1vBHuqPf8C9/4wa+n8x8CJ9KEZrR4OoeoAUyOnOE=
+  </data>
+ </layer>
+ <layer id="5" name="Decorative" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt18EKgCAMBmCh9QTV+z9AvVNdO9W1WzsmiDZTm/J/IAh6WNs0NAZy68gY4tGTPa/NwDGPPCay55DHzLldIvNbc589oc/gb3ug90LrWlyBOEPrKX2521xy1CB1jG+UrAEAQGqa/4eS2DTfxZpja93Kud8ayP/B33BGfIfGt2VMTBrflhpjkip1Plw19/WBdH/s+ZBy1dzXB9L9oMcNQsAYbA==
+  </data>
+ </layer>
+ <objectgroup id="6" name="Point">
+  <object id="1" name="SpawnPosition" x="318" y="812">
+   <point/>
+  </object>
+  <object id="2" name="SpawnArea" x="32" y="62" width="1532" height="856"/>
+ </objectgroup>
+ <layer id="3" name="Meta" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEKgCAQAFER//+bo4MgUikRNLvMA2+BO2mXSsmhtjyLbJzvbtYIHTvsYOizR+/o7GCxg8UOFjtY7GCxg8UOFjtYovxrWPmigfAO5g7CTG9kuFOnP76Pq72e9t95PuN5RF8H/EID3w==
+  </data>
+ </layer>
+</map>
