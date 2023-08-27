@@ -25,9 +25,12 @@ bool CharacterController::init(std::string entityName)
 		return false;
 	}
 	this->_entityName = entityName;
+	_hp = 100;
+	_atk = 30;
 	initComponents();
 	this->addChild(_model, 1);
 	this->addChild(_weaponAttachment);
+	this->addChild(_healthBar, 50);
 	return true;
 }
 
@@ -76,6 +79,7 @@ void CharacterController::update(float dt)
 void CharacterController::onEnter()
 {
 	EntityController::onEnter();
+	_health->revive(0);
 	_model->runAction(RepeatForever::create(
 		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle"))));
 	this->scheduleUpdate();
@@ -94,17 +98,20 @@ bool CharacterController::initComponents()
 	_state = EntityController::Idle;
 	_model->setPosition(Vec2::ZERO);
 
+	_healthBar = HealthBar::create("Sprites/GUIs/health-border.png", "Sprites/GUIs/health-green-fill.png");
+	float posY = _model->getContentSize().height / 2 + _healthBar->getChildren().at(0)->getContentSize().height / 2 + 10;
+	_healthBar->setPositionY(posY);
+	_healthBar->setHealthTarget(_health);
 	// init body
-	auto body = PhysicsBody::createEdgeBox(_model->getContentSize(), PhysicsMaterial(1, 0, 1), 1.5f);
-	this->setPhysicsBody(body);
+	initBody();
 
 	// weapon
 	_weaponAttachment = Node::create();
 	_weaponAttachment->setPositionY(0);
-	auto wpModel = Sprite::create("trident staff.png");
+	auto wpModel = Sprite::create("weap-1.png");
 	wpModel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
-	auto weapon = Weapon::createWeapon(wpModel,
+	auto weapon = Weapon::create(wpModel,
 		Vec2(wpModel->getContentSize().width, 0));
 	weapon->setASPD(0.3f);
 
@@ -121,6 +128,7 @@ void CharacterController::equip(Weapon* weapon)
 {
 	if (this->_weapon != NULL) _weapon->removeFromParent();
 	this->_weapon = weapon;
+	_weapon->setATK(_atk);
 	_weapon->setPosition(15, 0);
 	_weaponAttachment->addChild(_weapon);
 }
@@ -156,10 +164,10 @@ bool CharacterController::initAnimation()
 
 bool CharacterController::initBody()
 {
-	auto body = PhysicsBody::createEdgeBox(_model->getContentSize(), PhysicsMaterial(1, 0, 1));
+	auto body = PhysicsBody::createCircle(_model->getContentSize().width * 0.5f, PhysicsMaterial(1, 1, 1));
 	body->setCategoryBitmask(Bitmask::Player);
-	body->setContactTestBitmask(Bitmask::None);
-	body->setCollisionBitmask(Bitmask::None);
+	body->setContactTestBitmask(Bitmask::Enemy);
+	body->setCollisionBitmask(Bitmask::Wall);
 	body->setRotationEnable(false);
 	this->setPhysicsBody(body);
 	return true;
@@ -184,11 +192,7 @@ void CharacterController::move(Vec2 direction, float deltaTime)
 {
 	float spd = _spd;
 	if (direction.x * (_model->isFlippedX() ? -1 : 1) < 0) spd = _spd * 0.7f;
-	Vec2 offset = direction * spd * deltaTime;
-	Vec2 nextPosition = _position + offset;
+	Vec2 offset = direction * spd;
 
-	TiledMap::MetaType metaType = TiledMap::_mainMap->getMetaAt(nextPosition);
-	if (metaType == TiledMap::MetaType::InsideRed) return;
-
-	this->setPosition(nextPosition);
+	_physicsBody->setVelocity(offset);
 }

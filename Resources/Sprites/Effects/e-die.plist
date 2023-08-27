@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+ <dict>
+  <key>frames</key>
+  <dict>
+   <key>./e-die (1)</key>
+   <dict>
+    <key>aliases</key>
+    <array/>
+    <key>spriteOffset</key>
+    <string>{-1,0}</string>
+    <key>spriteSize</key>
+    <string>{39,33}</string>
+    <key>spriteSourceSize</key>
+    <string>{79,79}</string>
+    <key>textureRect</key>
+    <string>{{79,44},{39,33}}</string>
+    <key>textureRotated</key>
+    <false/>
+   </dict>
+   <key>./e-die (2)</key>
+   <dict>
+    <key>aliases</key>
+    <array/>
+    <key>spriteOffset</key>
+    <string>{-1,0}</string>
+    <key>spriteSize</key>
+    <string>{57,42}</string>
+    <key>spriteSourceSize</key>
+    <string>{79,79}</string>
+    <key>textureRect</key>
+    <string>{{79,0},{57,42}}</string>
+    <key>textureRotated</key>
+    <false/>
+   </dict>
+   <key>./e-die (3)</key>
+   <dict>
+    <key>aliases</key>
+    <array/>
+    <key>spriteOffset</key>
+    <string>{-1,0}</string>
+    <key>spriteSize</key>
+    <string>{77,52}</string>
+    <key>spriteSourceSize</key>
+    <string>{79,79}</string>
+    <key>textureRect</key>
+    <string>{{0,57},{77,52}}</string>
+    <key>textureRotated</key>
+    <false/>
+   </dict>
+   <key>./e-die (4)</key>
+   <dict>
+    <key>aliases</key>
+    <array/>
+    <key>spriteOffset</key>
+    <string>{0,1}</string>
+    <key>spriteSize</key>
+    <string>{77,55}</string>
+    <key>spriteSourceSize</key>
+    <string>{79,79}</string>
+    <key>textureRect</key>
+    <string>{{0,0},{77,55}}</string>
+    <key>textureRotated</key>
+    <false/>
+   </dict>
+  </dict>
+  <key>metadata</key>
+  <dict>
+   <key>format</key>
+   <integer>3</integer>
+   <key>size</key>
+   <string>{138,111}</string>
+   <key>textureFileName</key>
+   <string>e-die.png</string>
+  </dict>
+ </dict>
+</plist>

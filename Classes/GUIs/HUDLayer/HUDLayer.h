@@ -15,11 +15,6 @@ public:
 protected:
 	static HUDLayer* _instance;
 	virtual bool init();
-
-protected:
-	Camera* _mainCam;
-	PauseLayer* _pauseLayer;
-	bool _showingPauseLayer = false;
 protected:
 	void pauseCallback(Ref* sender, ui::Widget::TouchEventType eventType);
 
@@ -27,6 +22,12 @@ protected:
 	virtual void update(float dt);
 	virtual void onExit();
 	virtual void resume();
+protected:
+	Camera* _mainCam;
+	PauseLayer* _pauseLayer;
+	bool _showingPauseLayer = false;
+
+	Label* _scoreText, * _timerText;
 };
 
 #endif // !__HUD_LAYER_H__

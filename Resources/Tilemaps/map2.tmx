@@ -24,10 +24,10 @@
   </data>
  </layer>
  <objectgroup id="6" name="Point">
-  <object id="1" name="SpawnPosition" x="318" y="812">
+  <object id="1" name="SpawnPosition" x="794" y="506">
    <point/>
   </object>
-  <object id="2" name="SpawnArea" x="32" y="62" width="1532" height="856"/>
+  <object id="2" name="SpawnArea" x="11" y="43.6667" width="1571.5" height="907"/>
  </objectgroup>
  <layer id="3" name="Meta" width="50" height="30">
   <data encoding="base64" compression="zlib">

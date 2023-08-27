@@ -89,7 +89,7 @@ bool Projectile::onContactBegin(const PhysicsContact& contact)
 
 	auto damageable = dynamic_cast<IDamageable*>(target);
 	if (damageable != nullptr) 
-		damageable->takeDamage(10);
+		damageable->takeDamage(_atk);
 	destroy();
 
 	return true;
@@ -97,10 +97,10 @@ bool Projectile::onContactBegin(const PhysicsContact& contact)
 
 bool Projectile::initBody()
 {
-	auto body = PhysicsBody::createCircle(_contentSize.width / 2, PhysicsMaterial(1, 0, 1));
+	auto body = PhysicsBody::createCircle(_contentSize.width / 2, PhysicsMaterial(1, 1, 1));
 	body->setCategoryBitmask(Bitmask::Projectile);
-	body->setContactTestBitmask(Bitmask::Enemy);
-	body->setCollisionBitmask(Bitmask::None);
+	body->setContactTestBitmask(Bitmask::Enemy | Bitmask::Wall);
+	body->setCollisionBitmask(Bitmask::Wall);
 	body->setRotationEnable(false);
 	this->setPhysicsBody(body);
 	return true;

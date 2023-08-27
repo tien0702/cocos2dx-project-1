@@ -6,8 +6,7 @@ GameManager* GameManager::getInstance()
 {
 	if (_instance == nullptr)
 	{
-		_instance = new GameManager();
-		_instance->init();
+		_instance = GameManager::create();
 		_instance->retain();
 	}
 	return _instance;
@@ -18,7 +17,7 @@ void GameManager::addScore(int amount)
 	_score += amount;
 	for (auto callback : _onChangeScore)
 	{
-		callback(amount);
+		callback(_score);
 	}
 }
 
@@ -35,13 +34,15 @@ bool GameManager::init()
 		return false;
 	}
 
-
+	_gameTimer = 0.0;
+	this->scheduleUpdate();
 	return true;
 }
 
 void GameManager::update(float dt)
 {
 	_gameTimer += dt;
+	log("%lf", _gameTimer);
 }
 
 void GameManager::onEnter()

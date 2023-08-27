@@ -13,6 +13,9 @@ public:
 	static std::pair<Animation*, int> createAnimation(std::string fileName);
 	static Animation* createAnimation(std::string fileName, int numberFrames, float duration);
 	static std::pair<std::string, std::string> initSpriteFramesPath(std::string path, std::string fileName);
+	static bool loadAnimationCache(std::string aniName);
+	static bool loadAnimationsCache(std::vector<std::string> aniLst);
+	static std::string doubleToTime(double timeValue);
 };
 
 #endif // !__UTILITIES_H__

@@ -3,7 +3,7 @@
 #include "Managers/AudioManager.h"
 #include "Utilities/DefaultPath.h"
 
-Weapon* Weapon::createWeapon(Sprite* model, Vec2 shootPoint)
+Weapon* Weapon::create(Sprite* model, Vec2 shootPoint)
 {
 	auto newTarget = new Weapon();
 	if (newTarget && newTarget->init(model, shootPoint))
@@ -24,22 +24,32 @@ bool Weapon::init(Sprite* model, Vec2 shootPoint)
 	}
 	this->_model = model;
 	this->_shootPoint = shootPoint;
-
 	_cooldownTime = 0;
+
+	_glowEf = Animate::create(AnimationCache::getInstance()->getAnimation("glow")->clone());
+	_glowEf->setDuration(0.5f);
+	_glowEf->retain();
+
+	_shootNode = Sprite::create();
+
+	_shootNode->setPositionX(_shootPoint.x);
+	_shootNode->setPositionY(_model->getContentSize().height / 2);
 	// add listener
 	auto listener = cocos2d::EventListenerMouse::create();
 	listener->onMouseDown = CC_CALLBACK_1(Weapon::onMouseDown, this);
-
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-	
+
 	this->scheduleUpdate();
-	if (_model != nullptr) this->addChild(_model);
+	if (_model != nullptr)
+	{
+		_model->addChild(_shootNode);
+		this->addChild(_model);
+	}
 	return true;
 }
 
 void Weapon::onMouseDown(cocos2d::EventMouse* event)
 {
-	log("down");
 	attack(InputManager::getInstance()->mousePosition() - _parent->getParent()->getPosition());
 }
 
@@ -53,6 +63,10 @@ void Weapon::attack(Vec2 direction)
 	p->setTimeLife(0.5f);
 	p->launch(direction);
 	p->setPosition(convertToWorldSpace(_shootPoint));
+	p->setATK(_atk);
+
+	_shootNode->stopAllActions();
+	_shootNode->runAction(_glowEf->clone());
 	AudioManager::getInstance()->playSFX(DefaultPath::AUDIO_PATH + "fire.mp3");
 	Director::getInstance()->getRunningScene()->addChild(p);
 }

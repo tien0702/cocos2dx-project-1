@@ -15,6 +15,11 @@ public:
 	void destroy();
 
 protected:
+	virtual void update(float dt);
+	bool onContactBegin(const PhysicsContact& contact);
+	bool initBody();
+
+protected:
 	CC_SYNTHESIZE(int, _atk, ATK);
 	CC_SYNTHESIZE(float, _spd, SPD);
 	CC_SYNTHESIZE(float, _timeLife, TimeLife);
@@ -23,11 +28,6 @@ protected:
 	float _cooldownTime;
 	Vec2 _shootDirection;
 	Animate* _destroyEffect;
-protected:
-	virtual void update(float dt);
-	bool onContactBegin(const PhysicsContact& contact);
-
-	bool initBody();
 };
 
 #endif // !__PROJECTILE_H__

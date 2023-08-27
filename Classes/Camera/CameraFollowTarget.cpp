@@ -58,3 +58,9 @@ void CameraFollowTarget::update(float dt)
 	_camFollow->setPositionX(MathUtil::lerp(posCam.x, xNew, _smoothRate));
 	_camFollow->setPositionY(MathUtil::lerp(posCam.y, yNew, _smoothRate));
 }
+
+void CameraFollowTarget::onEnter()
+{
+	Node::onEnter();
+	this->setPosition(_target->getPosition());
+}

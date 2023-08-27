@@ -15,6 +15,7 @@ bool TiledMap::initWithTMXFile(const std::string& tmxFile)
 	_tileSize.width = _contentSize.width / _mapSize.width;
 	_tileSize.height = _contentSize.height / _mapSize.height;
 	_pointGroup = this->getObjectGroup("Point");
+
 	return true;
 }
 

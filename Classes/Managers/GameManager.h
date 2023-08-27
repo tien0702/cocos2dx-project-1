@@ -21,6 +21,7 @@ protected:
 	virtual void update(float dt);
 	virtual void onEnter();
 	virtual void onExit();
+	CREATE_FUNC(GameManager);
 protected:
 	virtual void spawnEnemy();
 protected:

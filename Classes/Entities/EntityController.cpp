@@ -19,7 +19,7 @@ void EntityController::takeDamage(int amount)
 
 void EntityController::move(Vec2 direction, float deltaTime)
 {
-	this->setPosition(_position += direction * _spd * deltaTime);
+	this->setPosition(_position + direction * _spd * deltaTime);
 }
 
 void EntityController::onEnter()

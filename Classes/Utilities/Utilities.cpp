@@ -1,5 +1,9 @@
 #include "Utilities.h"
 #include "DefaultPath.h"
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <ctime>
 
 std::string Utilities::justifyStrings(const std::string& str1, const std::string& str2, int width)
 {
@@ -73,4 +77,35 @@ std::pair<std::string, std::string> Utilities::initSpriteFramesPath(std::string 
 	plist = path + fileName + ".plist";
 	png = path + fileName + ".png";
 	return std::pair<std::string, std::string>(plist, png);
+}
+
+bool Utilities::loadAnimationCache(std::string aniName)
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile(DefaultPath::EFFECT_PATH + aniName + ".plist",
+		DefaultPath::EFFECT_PATH + aniName + ".png");
+	auto explosion = Utilities::createAnimation(aniName);
+	AnimationCache::getInstance()->addAnimation(explosion.first, aniName);
+	return true;
+}
+
+bool Utilities::loadAnimationsCache(std::vector<std::string> aniLst)
+{
+	for (auto aniName : aniLst)
+	{
+		Utilities::loadAnimationCache(aniName);
+	}
+	return true;
+}
+
+std::string Utilities::doubleToTime(double timeValue) {
+	int totalSeconds = static_cast<int>(timeValue);
+	int hours = totalSeconds / 3600;
+	int remainingSeconds = totalSeconds % 3600;
+	int minutes = remainingSeconds / 60;
+	int seconds = remainingSeconds % 60;
+
+	char buffer[9];
+	snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
+	return buffer;
 }

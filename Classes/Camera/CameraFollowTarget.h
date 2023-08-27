@@ -19,6 +19,8 @@ protected:
 
 	Size _winSize;
 	virtual void update(float dt);
+
+	virtual void onEnter();
 };
 
 #endif // !__CAMERA_FOLLOW_TARGET_H__

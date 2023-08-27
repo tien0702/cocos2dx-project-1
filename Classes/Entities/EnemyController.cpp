@@ -3,6 +3,7 @@
 #include "Utilities/Utilities.h"
 #include "Utilities/Bitmask.h"
 #include "Maps/TiledMap.h"
+#include "Player/Player.h"
 
 
 EnemyController* EnemyController::create(std::string entityName)
@@ -25,12 +26,28 @@ bool EnemyController::init(std::string entityName)
 		return false;
 	}
 	this->_entityName = entityName;
-	initComponents();
 	_hp = 100;
+	_atk = 15;
+	_spd = 80;
+	_level = 10;
+	initComponents();
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(EnemyController::onContactBegin, this);
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+
+	auto eDieEf = AnimationCache::getInstance()->getAnimation("e-die")->clone();
+	eDieEf->setDelayPerUnit(0.1f);
+	_destroyEffect = Animate::create(eDieEf);
+	_destroyEffect->retain();
+
 	auto appear = Animate::create(AnimationCache::getInstance()->getAnimation("appear")->clone());
 	auto idle = RepeatForever::create(
 		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle")->clone()));
 
+	_health->registerEvent(Health::HealthEvent::OnDie, [&](int) {this->destroy(); });
+
+	_state = EntityState::Move;
 	_model->runAction(idle);
 	this->addChild(_model);
 	this->addChild(_healthBar, 100);
@@ -41,6 +58,7 @@ void EnemyController::takeDamage(int damage)
 {
 	EntityController::takeDamage(damage);
 	_health->takeDamage(damage);
+	_state = EntityState::Hurt;
 }
 
 
@@ -72,13 +90,13 @@ bool EnemyController::initAnimation()
 	spriteCache->addSpriteFramesWithFile(diePath.first, diePath.second);*/
 
 	// add AnimationCache
-	Animation* idle, * move, * attack, * die;
+	Animation* hurt, * move, * attack, * die;
 	move = Utilities::createAnimation(_entityName + "-move").first;
-	idle = Utilities::createAnimation(_entityName + "-hurt").first;
+	hurt = Utilities::createAnimation(_entityName + "-hurt").first;
 	die = Utilities::createAnimation(_entityName + "-die").first;
 
 	aniCache->addAnimation(move, _entityName + "-move");
-	aniCache->addAnimation(idle, _entityName + "-hurt");
+	aniCache->addAnimation(hurt, _entityName + "-hurt");
 	aniCache->addAnimation(die, _entityName + "-die");
 
 	return true;
@@ -86,7 +104,7 @@ bool EnemyController::initAnimation()
 
 bool EnemyController::initBody()
 {
-	auto body = PhysicsBody::createEdgeBox(_model->getContentSize(), PhysicsMaterial(1, 0, 1));
+	auto body = PhysicsBody::createCircle(_model->getContentSize().width * 0.6f, PhysicsMaterial(1, 0, 1));
 	body->setCategoryBitmask(Bitmask::Enemy);
 	body->setContactTestBitmask(Bitmask::Player);
 	body->setCollisionBitmask(Bitmask::None);
@@ -97,12 +115,49 @@ bool EnemyController::initBody()
 
 void EnemyController::update(float dt)
 {
+	switch (_state)
+	{
+	case EntityController::Move:
+	{
+		auto target = Player::getInstance()->getCharacter();
+		Vec2 dir = target->getPosition() - _position;
+		dir.normalize();
+		this->move(dir, dt);
+
+		if (dir.x != 0) _model->setFlippedX(dir.x < 0);
+	}
+		break;
+	case EntityController::Hurt:
+	{
+		_cooldownHurtDelay -= dt;
+		if (_cooldownHurtDelay <= 0)
+		{
+			_cooldownHurtDelay = _hurtDelay;
+			_state = EntityState::Move;
+		}
+	}
+		break;
+	case EntityController::Die:
+		break;
+	default:
+		break;
+	}
 }
 
 void EnemyController::onEnter()
 {
 	EntityController::onEnter();
 	_health->revive(0);
+	this->scheduleUpdate();
+	_health->registerEvent(Health::OnDie, [&](int) {
+		for (auto callback : _onDie)
+		{
+			callback(this);
+		}
+		});
+	auto idle = RepeatForever::create(
+		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle")->clone()));
+	_model->runAction(idle);
 }
 
 void EnemyController::onExit()
@@ -110,3 +165,30 @@ void EnemyController::onExit()
 	EntityController::onExit();
 }
 
+bool EnemyController::onContactBegin(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+
+	if (nodeA != this && nodeB != this) return true;
+	auto target = (nodeA == this ? (nodeB) : (nodeA));
+
+	auto damageable = dynamic_cast<IDamageable*>(target);
+	if (damageable != nullptr)
+	{
+		damageable->takeDamage(_atk);
+		this->destroy();
+	}
+
+	return true;
+}
+
+void EnemyController::destroy()
+{
+	this->unscheduleUpdate();
+	this->getPhysicsBody()->removeFromWorld();
+	auto sequen = Sequence::createWithTwoActions(_destroyEffect->clone(),
+		CallFunc::create([=]() {this->removeFromParent(); }));
+	_model->stopAllActions();
+	_model->runAction(sequen);
+}

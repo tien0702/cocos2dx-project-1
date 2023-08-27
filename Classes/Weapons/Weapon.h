@@ -9,8 +9,12 @@ USING_NS_CC;
 class Weapon : public Node
 {
 public:
-	static Weapon* createWeapon(Sprite* model, Vec2 shootPoint);
+	static Weapon* create(Sprite* model, Vec2 shootPoint);
 	virtual bool init(Sprite* model, Vec2 shootPoint);
+protected:
+	void onMouseDown(cocos2d::EventMouse* event);
+	virtual void attack(Vec2 direction);
+	virtual void update(float dt);
 protected:
 	CC_SYNTHESIZE(Sprite*, _model, Model);
 	CC_SYNTHESIZE(Vec2, _shootPoint, ShootPoint);
@@ -20,10 +24,8 @@ protected:
 	CC_SYNTHESIZE(std::vector<Projectile*>, _projectiles, WP_Projectiles);
 protected:
 	float _cooldownTime;
-protected:
-	void onMouseDown(cocos2d::EventMouse* event);
-	void attack(Vec2 direction);
-	virtual void update(float dt);
+	Sprite* _shootNode;
+	Animate* _glowEf;
 };
 
 
