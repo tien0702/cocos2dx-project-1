@@ -17,8 +17,8 @@ bool GameScene::init()
 		return false;
 	}
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 	this->getPhysicsWorld()->setGravity(Vec2::ZERO);
 	// init animation
 	auto spriteCache = SpriteFrameCache::getInstance();
@@ -26,6 +26,11 @@ bool GameScene::init()
 		DefaultPath::EFFECT_PATH + "explosion" + ".png");
 	auto explosion = Utilities::createAnimation("explosion");
 	AnimationCache::getInstance()->addAnimation(explosion.first, "explosion");
+
+	spriteCache->addSpriteFramesWithFile(DefaultPath::EFFECT_PATH + "appear.plist",
+		DefaultPath::EFFECT_PATH + "appear.png");
+	auto appear = Utilities::createAnimation("appear");
+	AnimationCache::getInstance()->addAnimation(appear.first, "appear");
 
 	// init map
 	auto map = new TiledMap();

@@ -88,7 +88,8 @@ bool Projectile::onContactBegin(const PhysicsContact& contact)
 	auto target = (nodeA == this ? (nodeB) : (nodeA));
 
 	auto damageable = dynamic_cast<IDamageable*>(target);
-	if (damageable != nullptr) damageable->takeDamage(this->_atk);
+	if (damageable != nullptr) 
+		damageable->takeDamage(10);
 	destroy();
 
 	return true;

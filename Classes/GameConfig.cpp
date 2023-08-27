@@ -7,6 +7,7 @@
 std::string GameConfig::_path = cocos2d::FileUtils::getInstance()->getWritablePath() + "config.txt";
 float GameConfig::_sfxVolume = 0.0f;
 float GameConfig::_bgmVolume = 0.0f;
+TTFConfig GameConfig::_font;
 
 bool GameConfig::save()
 {
@@ -31,6 +32,13 @@ bool GameConfig::load()
 	{
 		GameConfig::save();
 	}
+
+	_font.fontFilePath = "fonts/Marker Felt.ttf";
+	_font.fontSize = 30;
+	_font.glyphs = GlyphCollection::DYNAMIC;
+	_font.outlineSize = 1;
+	_font.customGlyphs = nullptr;
+	_font.distanceFieldEnabled = false;
 	rapidjson::Document document;
 
 	std::string fileData = cocos2d::FileUtils::getInstance()->getStringFromFile(_path);

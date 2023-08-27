@@ -114,8 +114,7 @@ bool CharacterController::initComponents()
 
 void CharacterController::takeDamage(int damage)
 {
-	_currentHP = MAX(0, _currentHP - damage);
-	if (_currentHP == 0) log("die");
+	_health->takeDamage(damage);
 }
 
 void CharacterController::equip(Weapon* weapon)
@@ -142,7 +141,7 @@ bool CharacterController::initAnimation()
 	spriteCache->addSpriteFramesWithFile(diePath.first, diePath.second);
 
 	// add AnimationCache
-	Animation* idle, * move, * attack, * die;
+	Animation* idle, * move, * die;
 	idle = Utilities::createAnimation(_entityName + "-idle").first;
 	move = Utilities::createAnimation(_entityName + "-move").first;
 	//attack = Utilities::createAnimation(_entityName + "-attack").first;

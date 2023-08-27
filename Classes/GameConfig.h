@@ -3,13 +3,15 @@
 
 #include "cocos2d.h"
 
+USING_NS_CC;
+
 class GameConfig
 {
 public:
 	static std::string _path;
 	static float _sfxVolume;
 	static float _bgmVolume;
-
+	static TTFConfig _font;
 	static bool save();
 	static bool load();
 };

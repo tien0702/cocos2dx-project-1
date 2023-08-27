@@ -2,10 +2,9 @@
 #define __CHARACTER_CONTROLLER_H__
 
 #include "EntityController.h"
-#include "DamageSystem/IDamageable.h"
 #include "Weapons/Weapon.h"
 
-class CharacterController : public EntityController, public IDamageable
+class CharacterController : public EntityController
 {
 public:
 	static CharacterController* create(std::string entityName);

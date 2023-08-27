@@ -26,16 +26,21 @@ bool EnemyController::init(std::string entityName)
 	}
 	this->_entityName = entityName;
 	initComponents();
+	_hp = 100;
+	auto appear = Animate::create(AnimationCache::getInstance()->getAnimation("appear")->clone());
+	auto idle = RepeatForever::create(
+		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle")->clone()));
 
-	_model->runAction(RepeatForever::create(
-		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle"))));
+	_model->runAction(idle);
 	this->addChild(_model);
+	this->addChild(_healthBar, 100);
 	return true;
 }
 
 void EnemyController::takeDamage(int damage)
 {
-	
+	EntityController::takeDamage(damage);
+	_health->takeDamage(damage);
 }
 
 
@@ -45,6 +50,10 @@ bool EnemyController::initComponents()
 	this->_model = Sprite::createWithSpriteFrameName("./" + _entityName + "-idle (1)");
 	_state = EntityController::Idle;
 	_model->setPosition(Vec2::ZERO);
+	_healthBar = HealthBar::create("Sprites/GUIs/health-border.png", "Sprites/GUIs/health-fill.png");
+	float posY = _model->getContentSize().height / 2 + _healthBar->getChildren().at(0)->getContentSize().height / 2 + 10;
+	_healthBar->setPositionY(posY);
+	_healthBar->setHealthTarget(_health);
 	initBody();
 	return true;
 }
@@ -84,5 +93,20 @@ bool EnemyController::initBody()
 	body->setRotationEnable(false);
 	this->setPhysicsBody(body);
 	return true;
+}
+
+void EnemyController::update(float dt)
+{
+}
+
+void EnemyController::onEnter()
+{
+	EntityController::onEnter();
+	_health->revive(0);
+}
+
+void EnemyController::onExit()
+{
+	EntityController::onExit();
 }
 
