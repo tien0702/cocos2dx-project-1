@@ -27,7 +27,7 @@ protected:
 	PauseLayer* _pauseLayer;
 	bool _showingPauseLayer = false;
 
-	Label* _scoreText, * _timerText;
+	Label* _enemiesKilledText, * _scoreText, * _timerText;
 };
 
 #endif // !__HUD_LAYER_H__

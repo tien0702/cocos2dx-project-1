@@ -12,12 +12,15 @@ public:
 	static HealthBar* create(std::string borderPath, std::string fillPath);
 	virtual bool init(std::string borderPath, std::string fillPath);
 
+	virtual void setHealthTarget(Health* healthTarget);
+	virtual Health* getHealthTarget() { return _healthTarget; }
 protected:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual void onHPChange(int val);
+
 protected:
-	CC_SYNTHESIZE(Health*, _healthTarget, HealthTarget);
+	Health* _healthTarget;
 
 	Sprite* _border, * _fill;
 };

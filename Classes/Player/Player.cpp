@@ -15,7 +15,11 @@ Player* Player::getInstance()
 Player::Player()
 {
     _character = CharacterController::create("main");
-    _character->setSPD(170);
+
+    /*_character->setHP(100);
+    _character->setATK(30);
+    _character->setASPD(0.3f);
+    _character->setSPD(150);*/
     _character->retain();
 }
 

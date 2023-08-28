@@ -21,6 +21,15 @@ void GameManager::addScore(int amount)
 	}
 }
 
+void GameManager::addEnemyKilled(int amount)
+{
+	_enemiesKilled += amount;
+	for (auto callback : _onChangeEnemiesKilled)
+	{
+		callback(_enemiesKilled);
+	}
+}
+
 void GameManager::destroy()
 {
 	this->autorelease();
@@ -42,7 +51,6 @@ bool GameManager::init()
 void GameManager::update(float dt)
 {
 	_gameTimer += dt;
-	log("%lf", _gameTimer);
 }
 
 void GameManager::onEnter()
@@ -53,9 +61,4 @@ void GameManager::onEnter()
 void GameManager::onExit()
 {
 	Node::onExit();
-}
-
-void GameManager::spawnEnemy()
-{
-	_delaySpawn = 0.0f;
 }

@@ -41,22 +41,31 @@ bool HUDLayer::init()
 	// Labels
 	auto font = GameConfig::_font;
 	font.fontSize = 20;
+	_enemiesKilledText = Label::createWithTTF(font, "Enemies Killed: 0");
 	_scoreText = Label::createWithTTF(font, "Score: 0");
 	_timerText = Label::createWithTTF(font, "0");
 
+	_enemiesKilledText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 	_scoreText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 	_timerText->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 
+	_enemiesKilledText->setAlignment(TextHAlignment::LEFT);
 	_timerText->setAlignment(TextHAlignment::LEFT);
 	_scoreText->setAlignment(TextHAlignment::LEFT);
 
-	_scoreText->setPosition(30, visibleSize.height - 50);
-	_timerText->setPosition(30 / 2, visibleSize.height - 100);
+	_enemiesKilledText->setPosition(30, visibleSize.height - 30);
+	_scoreText->setPosition(30, visibleSize.height - 60);
+	_timerText->setPosition(30, visibleSize.height - 90);
 
 	GameManager::getInstance()->_onChangeScore.push_back([&](int score) {
 		_scoreText->setString("Score: " + std::to_string(score));
 		});
 
+	GameManager::getInstance()->_onChangeEnemiesKilled.push_back([&](int numKilled) {
+		_enemiesKilledText->setString("Enemies Killed: " + std::to_string(numKilled));
+		});
+
+	this->addChild(_enemiesKilledText);
 	this->addChild(_scoreText);
 	this->addChild(_timerText);
 	this->addChild(pauseBtn);

@@ -14,7 +14,7 @@ bool EntityController::init()
 
 void EntityController::takeDamage(int amount)
 {
-
+	_health->takeDamage(amount);
 }
 
 void EntityController::move(Vec2 direction, float deltaTime)

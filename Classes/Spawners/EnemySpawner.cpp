@@ -2,6 +2,7 @@
 #include "Managers/GameManager.h"
 #include "Maps/TiledMap.h"
 #include "Scenes/GameScene/GameScene.h"
+#include "GUIs/FloatingNumber.h"
 
 EnemySpawner* EnemySpawner::_instance;
 
@@ -34,12 +35,12 @@ bool EnemySpawner::init()
 
 	//
 	std::queue<EnemyController*> enemiesLst;
-	_enemies.insert(std::pair<std::string, std::queue<EnemyController*>>("enemy-1", enemiesLst));
+	_enemies.insert(std::pair<std::string, std::queue<EnemyController*>>("wing-dron", enemiesLst));
 	for (int i = 0; i < 20; i++)
 	{
-		auto e = EnemyController::create("main");
+		auto e = EnemyController::create("wing-dron");
 		e->retain();
-		_enemies.at("enemy-1").push(e);
+		_enemies.at(e->getEntityName()).push(e);
 	}
 	return true;
 }
@@ -53,15 +54,34 @@ void EnemySpawner::spawnEnemy(std::string name)
 
 	float x = RandomHelper::random_real(_spawnArea.origin.x, _spawnArea.origin.x + _spawnArea.size.width);
 	float y = RandomHelper::random_real(_spawnArea.origin.y, _spawnArea.origin.y + _spawnArea.size.height);
-
 	enemy->setPosition(x, y);
+
+	calculateStats(enemy);
+
 	_gameScene->addChild(enemy, 3);
+}
+
+void EnemySpawner::calculateStats(EnemyController* enemy)
+{
+	double duration = GameManager::getInstance()->getGameTimer();
+	enemy->setLevel(duration + 1);
+
+	enemy->setHP(100 + duration / 15);
+
+	float atk = 10 + duration  / 10.0f;
+	enemy->setATK(atk);
+
+	float spd = 70 + duration / 30.0f;
+	enemy->setSPD(spd);
 }
 
 void EnemySpawner::onEnemyDie(EnemyController* enemy)
 {
-	GameManager::getInstance()->addScore(enemy->getLevel());
-	_enemies.at("enemy-1").push(enemy);
+	int score = enemy->getLevel();
+	GameManager::getInstance()->addScore(score);
+	GameManager::getInstance()->addEnemyKilled(1);
+	FloatingNumber::getIns()->floatText(enemy->getPosition(), "+" + std::to_string(score), Color4B::YELLOW);
+
 	_curEnemies--;
 }
 
@@ -80,6 +100,11 @@ void EnemySpawner::update(float dt)
 	if (_elapsedTime >= _delaySpawn)
 	{
 		_elapsedTime = 0;
-		spawnEnemy("enemy-1");
+		spawnEnemy("main");
 	}
+}
+
+void EnemySpawner::add(EnemyController* enemy)
+{
+	_enemies.at(enemy->getEntityName()).push(enemy);
 }

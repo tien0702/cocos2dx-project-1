@@ -34,17 +34,11 @@ bool HealthBar::init(std::string borderPath, std::string fillPath)
 void HealthBar::onEnter()
 {
 	Sprite::onEnter();
-	_healthTarget->registerEvent(Health::HealthEvent::OnTakeDamage, CC_CALLBACK_1(HealthBar::onHPChange, this));
-	_healthTarget->registerEvent(Health::HealthEvent::OnRecovery, CC_CALLBACK_1(HealthBar::onHPChange, this));
-	_healthTarget->registerEvent(Health::HealthEvent::OnRevive, CC_CALLBACK_1(HealthBar::onHPChange, this));
 }
 
 void HealthBar::onExit()
 {
 	Sprite::onExit();
-	_healthTarget->unregisterEvent(Health::HealthEvent::OnTakeDamage, CC_CALLBACK_1(HealthBar::onHPChange, this));
-	_healthTarget->unregisterEvent(Health::HealthEvent::OnRecovery, CC_CALLBACK_1(HealthBar::onHPChange, this));
-	_healthTarget->unregisterEvent(Health::HealthEvent::OnRevive, CC_CALLBACK_1(HealthBar::onHPChange, this));
 }
 
 void HealthBar::onHPChange(int val)
@@ -57,4 +51,18 @@ void HealthBar::onHPChange(int val)
 		FloatingNumber::getIns()->floatText(_parent->getPosition(), std::to_string(val), Color4B::RED);
 	else
 		FloatingNumber::getIns()->floatText(_parent->getPosition(), "+" + std::to_string(val), Color4B::GREEN);
+}
+
+void HealthBar::setHealthTarget(Health* healthTarget)
+{
+	if (_healthTarget != nullptr)
+	{
+		_healthTarget->unregisterEvent(Health::HealthEvent::OnTakeDamage, CC_CALLBACK_1(HealthBar::onHPChange, this));
+		_healthTarget->unregisterEvent(Health::HealthEvent::OnRecovery, CC_CALLBACK_1(HealthBar::onHPChange, this));
+		_healthTarget->unregisterEvent(Health::HealthEvent::OnRevive, CC_CALLBACK_1(HealthBar::onHPChange, this));
+	}
+	this->_healthTarget = healthTarget;
+	_healthTarget->registerEvent(Health::HealthEvent::OnTakeDamage, CC_CALLBACK_1(HealthBar::onHPChange, this));
+	_healthTarget->registerEvent(Health::HealthEvent::OnRecovery, CC_CALLBACK_1(HealthBar::onHPChange, this));
+	_healthTarget->registerEvent(Health::HealthEvent::OnRevive, CC_CALLBACK_1(HealthBar::onHPChange, this));
 }

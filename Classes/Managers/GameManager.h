@@ -13,8 +13,10 @@ class GameManager : public Node
 public:
 	static GameManager* getInstance();
 	vector<function<void(int)>> _onChangeScore;
+	vector<function<void(int)>> _onChangeEnemiesKilled;
 
 	void addScore(int amount);
+	void addEnemyKilled(int amount);
 	void destroy();
 protected:
 	virtual bool init();
@@ -23,14 +25,10 @@ protected:
 	virtual void onExit();
 	CREATE_FUNC(GameManager);
 protected:
-	virtual void spawnEnemy();
-protected:
 	static GameManager* _instance;
-	vector<EnemyController*> _enemies;
-	int _score;
+	int _score = 0;
+	int _enemiesKilled = 0;
 
-	int numOfSpawn = 5;
-	float _delaySpawn = 0.2f;
 	CC_SYNTHESIZE(double, _gameTimer, GameTimer);
 
 };

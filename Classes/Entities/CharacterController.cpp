@@ -1,5 +1,6 @@
 #include "CharacterController.h"
 #include "Managers/InputManager.h"
+#include "Managers/GameManager.h"
 #include "Utilities/DefaultPath.h"
 #include "Utilities/Utilities.h"
 #include "Utilities/Bitmask.h"
@@ -25,8 +26,9 @@ bool CharacterController::init(std::string entityName)
 		return false;
 	}
 	this->_entityName = entityName;
-	_hp = 100;
-	_atk = 30;
+	GameManager::getInstance()->_onChangeEnemiesKilled
+		.push_back(CC_CALLBACK_1(CharacterController::calculateStats, this));
+
 	initComponents();
 	this->addChild(_model, 1);
 	this->addChild(_weaponAttachment);
@@ -79,6 +81,7 @@ void CharacterController::update(float dt)
 void CharacterController::onEnter()
 {
 	EntityController::onEnter();
+	this->calculateStats(0);
 	_health->revive(0);
 	_model->runAction(RepeatForever::create(
 		Animate::create(AnimationCache::getInstance()->getAnimation(_entityName + "-idle"))));
@@ -113,7 +116,6 @@ bool CharacterController::initComponents()
 
 	auto weapon = Weapon::create(wpModel,
 		Vec2(wpModel->getContentSize().width, 0));
-	weapon->setASPD(0.3f);
 
 	this->equip(weapon);
 	return true;
@@ -121,7 +123,7 @@ bool CharacterController::initComponents()
 
 void CharacterController::takeDamage(int damage)
 {
-	_health->takeDamage(damage);
+	EntityController::takeDamage(damage);
 }
 
 void CharacterController::equip(Weapon* weapon)
@@ -129,6 +131,7 @@ void CharacterController::equip(Weapon* weapon)
 	if (this->_weapon != NULL) _weapon->removeFromParent();
 	this->_weapon = weapon;
 	_weapon->setATK(_atk);
+	_weapon->setASPD(_aspd);
 	_weapon->setPosition(15, 0);
 	_weaponAttachment->addChild(_weapon);
 }
@@ -186,6 +189,19 @@ void CharacterController::lookAtMouse()
 {
 	Vec2 direction = InputManager::getInstance()->mousePosition() - _position;
 	if (direction.x != 0) _model->setFlippedX(direction.x < 0);
+}
+
+void CharacterController::calculateStats(int numKilled)
+{
+	_hp = 100 + numKilled / 3;
+	_atk = 30 + numKilled / 5;
+	_spd = 150 + numKilled / 7;
+	_aspd = 0.5f - (float)(numKilled / 15) * 0.05f;
+
+	_weapon->setATK(_atk);
+	_weapon->setASPD(_aspd);
+	_health->recovery(_hp - _health->getMaxHP());
+	_health->setMaxHP(_hp);
 }
 
 void CharacterController::move(Vec2 direction, float deltaTime)

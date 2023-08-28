@@ -12,13 +12,16 @@ class EnemySpawner : public Node
 {
 public:
 	static EnemySpawner* getInstance();
+	virtual void add(EnemyController* enemy);
 protected:
 	virtual bool init();
 	virtual void update(float dt);
-	CREATE_FUNC(EnemySpawner);
-	void spawnEnemy(std::string name);
 	void onEnemyDie(EnemyController* enemy);
 	void onEnter();
+	CREATE_FUNC(EnemySpawner);
+
+	virtual void spawnEnemy(std::string name);
+	virtual void calculateStats(EnemyController* enemy);
 protected:
 	static EnemySpawner* _instance;
 protected:

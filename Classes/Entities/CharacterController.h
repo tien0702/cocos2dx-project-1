@@ -24,6 +24,7 @@ protected:
 	bool initBody();
 	void weaponLookAtMouse();
 	void lookAtMouse();
+	void calculateStats(int numKilled);
 protected:
 	Node* _weaponAttachment;
 	Weapon* _weapon;
